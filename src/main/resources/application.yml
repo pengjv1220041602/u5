@@ -1,0 +1,24 @@
+server:
+  port: 80
+spring:
+  application.name: su5
+  datasource:
+     url: jdbc:mysql://localhost:3306/su5?useUnicode=true&characterEncoding=utf-8
+     username: root
+     password: root
+     driver-class-name: com.mysql.jdbc.Driver
+  thymeleaf:
+     mode: HTML
+     cache: false
+     prefix: classpath:/templates
+
+# 分页插件
+pagehelper:
+  helper-dialect: mysql
+  reasonable: true
+  support-methods-arguments: true
+  params: count=countSql
+web:
+  basepath: E:/files/
+  bookpath: ${web.basepath}bookpath/
+  photo: ${web.basepath}photo/
