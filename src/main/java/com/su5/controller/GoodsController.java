@@ -1,11 +1,10 @@
 package com.su5.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.su5.constants.Code;
 import com.su5.entry.Goods;
 import com.su5.service.GoodsService;
 import com.su5.utils.Result;
-import org.apache.ibatis.annotations.Param;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -18,12 +17,13 @@ import org.springframework.web.bind.annotation.*;
  */
 @Controller
 @ResponseBody
+@Slf4j
 public class GoodsController {
 
     @Autowired
     private GoodsService goodsService;
 
-    @GetMapping("/goods/{id}")
+    @GetMapping(path = "/goods/{id}")
     public Result goodsById (@PathVariable("id") String id) {
         Result result = new Result();
         try {
@@ -43,5 +43,26 @@ public class GoodsController {
         } catch (Exception e) {
             return result.builder().code(Code.EXCEPTION_CODE).message("出现异常").build();
         }
+    }
+
+    @PostMapping(path = "/goods")
+    public Result updateOrSaveGoods(@RequestBody Goods goods) {
+        try {
+            final boolean flag = goodsService.updateOrSaveGoods(goods);
+            if (flag) {
+                return new Result().builder().code(Code.SUCCESS_CODE).data(Boolean.TRUE).message("添加成功").build();
+            }
+        } catch (Exception e) {
+            log.error("exception");
+            return new Result().builder().code(Code.EXCEPTION_CODE).data(Boolean.FALSE).message("添加失败"+e).build();
+        }
+        return new Result().builder().code(Code.ERROER_CODE).data(Boolean.FALSE).message("添加失败").build();
+    }
+
+    @GetMapping(path = "/listgood")
+    public Result listBook (int page, int size, Goods goods) {
+        return
+            new Result().builder().code(Code.SUCCESS_CODE)
+                    .data(goodsService.listGoods(page, size, goods)).message("查询成功！").build();
     }
 }

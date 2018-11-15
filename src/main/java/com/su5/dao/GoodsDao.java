@@ -21,12 +21,12 @@ public interface GoodsDao {
     Goods getGoods(String id);
 
     @SelectProvider(type = GoodsProvider.class, method = "listGoods")
-    List<Goods> listGoods(int page, int size, Goods goods);
+    List<Goods> listGoods(Goods goods);
 
     @UpdateProvider(type = GoodsProvider.class, method = "updateGoods")
     int updateGoods(Goods goods);
 
-    @Insert("inert into t_goods (id, name,flag) values (#{id}, #{name}, #{flag})")
+    @Insert("insert into t_goods (id, `name`,flag) values (#{id}, #{name}, #{flag})")
     int saveGoods(Goods goods);
 
 }

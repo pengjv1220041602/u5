@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -34,10 +35,11 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public PageInfo listGoods(int page, int size, Goods goods) {
         PageHelper.startPage(page, size);
-        return new PageInfo(goodsDao.listGoods(page, size, goods));
+        return new PageInfo(goodsDao.listGoods(goods));
     }
 
     @Override
+    @Transactional
     public boolean updateOrSaveGoods(Goods goods) {
         if (StringUtils.isNotBlank(goods.getId())) {
             return goodsDao.updateGoods(goods) > 0;
